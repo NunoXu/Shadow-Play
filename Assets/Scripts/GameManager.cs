@@ -23,30 +23,6 @@ namespace Assets.Scripts
 
         }
         
-        void FixedUpdate()
-        {
-            
-            
-
-            /*foreach(Lantern lantern in lanterns) {
-                if (lantern.PickedUp)
-                {
-                    Vector3 lpos = lantern.transform.position;
-                    lpos.x += Input.GetAxis("Horizontal") * player.MoveSpeed * Time.deltaTime;
-                    lpos.y += Input.GetAxis("Vertical") * player.MoveSpeed * Time.deltaTime;
-
-                    float oldSqrDistance = Vector3.SqrMagnitude(oldPlayerPos - lantern.transform.position);
-                    float newSqrDistance = Vector3.SqrMagnitude(pos - lpos);
-                    if (Vector3.Distance(lpos, pos) < 1.2f)
-                    {
-
-                        lantern.GetComponent<Rigidbody2D>().MovePosition(lpos);
-                    }
-                }
-            }*/
-        }
-
-
         public Lantern PickupLantern(Player.Player player, Lantern lantern)
         {
             Lantern result = null;

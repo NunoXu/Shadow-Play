@@ -20,6 +20,11 @@ namespace Assets.Scripts.Player
                 else
                     player.PickUpLantern();
             }
+
+            if (Input.GetButtonDown("Toggle Trans"))
+            {
+                player.ToggleTrans();
+            }
         }
     }
 }

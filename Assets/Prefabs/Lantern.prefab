@@ -28,7 +28,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 457246}
   - 212: {fileID: 21279056}
-  - 61: {fileID: 6140998}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -46,6 +45,7 @@ GameObject:
   - 4: {fileID: 492472}
   - 114: {fileID: 11444090}
   - 50: {fileID: 5012076}
+  - 61: {fileID: 6159356}
   m_Layer: 0
   m_Name: Lantern
   m_TagString: Lantern
@@ -84,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173294}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.83, y: 10.78, z: 0}
+  m_LocalPosition: {x: 1.97, y: 0.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 422476}
@@ -132,7 +132,7 @@ Rigidbody2D:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173294}
   m_UseAutoMass: 0
-  m_Mass: 1000000
+  m_Mass: 1
   m_LinearDrag: 1
   m_AngularDrag: 1
   m_GravityScale: 0
@@ -141,20 +141,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &6140998
+--- !u!61 &6159356
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 129660}
+  m_GameObject: {fileID: 173294}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.00008952618, y: 0.00008149445}
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.49998403, y: 0.49995023}
 --- !u!114 &11444090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4979a4f9af264e4ab627f3b4b9672ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PickedUp: 0
 --- !u!114 &11488276
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -184,7 +185,7 @@ MonoBehaviour:
   obstacleLayers:
     serializedVersion: 2
     m_Bits: 1792
-  distance: 5
+  distance: 1.5
 --- !u!114 &11496228
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,7 +209,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: b6c06b7dce9ee40e29dd98109acf4e6f, type: 2}
   orderInLayer: 0
   sortingLayer: 0
-  radius: 5
+  radius: 1.5
   flashFrequency: 0
   flashOffset: 0
 --- !u!212 &21279056

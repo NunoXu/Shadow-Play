@@ -17,11 +17,14 @@ namespace Assets.Scripts.Player
 
         private IList<Lantern> lanterns = new List<Lantern>();
         private SpriteRenderer spriteRenderer;
+        private LOS.LOSObstacle losObs;
+        private Color GREEN = new Color(0, 195f / 255f, 66f / 255f, 255f / 255f);
 
 
         void Start()
         {
-            spriteRenderer = this.GetComponent<SpriteRenderer>();
+            spriteRenderer = this.GetComponentInChildren<SpriteRenderer>();
+            losObs = GetComponentInChildren<LOS.LOSObstacle>();
 
             foreach (GameObject lantern in GameObject.FindGameObjectsWithTag("Lantern"))
             {
@@ -31,19 +34,18 @@ namespace Assets.Scripts.Player
 
         void Update()
         {
-            /*if (LanternPickedup != null)
+            if (LanternPickedup != null)
             {
-                if (Vector3.Distance(this.transform.position, LanternPickedup.transform.position) >= 1.2f)
+                if (Vector3.Distance(this.transform.position, LanternPickedup.transform.position) >= 1.5f)
                 {
                     DropLantern();
                 }
-            }*/
+            }
         }
 
         void FixedUpdate()
         {
             Vector3 pos = transform.position;
-            Vector3 oldPlayerPos = pos;
             pos.x += Input.GetAxis("Horizontal") * MoveSpeed * Time.deltaTime;
             pos.y += Input.GetAxis("Vertical") * MoveSpeed * Time.deltaTime;
             GetComponent<Rigidbody2D>().MovePosition(pos);
@@ -56,18 +58,31 @@ namespace Assets.Scripts.Player
 
             foreach (Lantern lantern in lanterns)
             {
+
                 var distance = Vector3.Distance(this.transform.position, lantern.transform.position);
-                if (distance < closestDistance) {
-                    closestLantern = lantern;
-                    closestDistance = distance;
+                var direction = lantern.transform.position - transform.position;
+
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, LayerMask.GetMask("Obstacles", "Glass"));
+                if (hit.collider == null)
+                {
+                    if (distance < closestDistance)
+                    {
+                        closestLantern = lantern;
+                        closestDistance = distance;
+                    }
                 }
+
             }
 
             if (closestLantern != null)
             {
                 LanternPickedup = gm.PickupLantern(this, closestLantern);
                 if (LanternPickedup != null)
-                    spriteRenderer.color = Color.red;
+                {
+                    var newcolor = Color.red;
+                    newcolor.a = spriteRenderer.color.a;
+                    spriteRenderer.color = newcolor;
+                }
             }
         }
 
@@ -75,7 +90,45 @@ namespace Assets.Scripts.Player
         {
             gm.DropLantern(LanternPickedup);
             LanternPickedup = null;
-            spriteRenderer.color = new Color32(0, 195, 66, 255);
+            var newcolor = GREEN;
+            newcolor.a = spriteRenderer.color.a;
+            spriteRenderer.color = newcolor;
+        }
+
+        public void ToggleTrans()
+        {
+            if (isTransparent())
+            {
+                setLayer(this.gameObject, LayerMask.NameToLayer("Player"));
+                var newcolor = spriteRenderer.color;
+                newcolor.a = Mathf.Clamp(spriteRenderer.color.a * 2, 0.0f, 1.0f);
+                spriteRenderer.color = newcolor;
+
+            }
+            else
+            {
+                setLayer(this.gameObject, LayerMask.NameToLayer("TransPlayer"));
+                var newcolor = spriteRenderer.color;
+                newcolor.a = Mathf.Clamp(spriteRenderer.color.a / 2, 0.0f, 1.0f);
+                spriteRenderer.color = newcolor;
+            }
+
+            losObs.enabled = !losObs.enabled;
+        }
+
+        public bool isTransparent()
+        {
+            return !losObs.enabled;
+        }
+
+        private void setLayer(GameObject obj, int newLayer)
+        {
+            obj.layer = newLayer;
+
+            foreach (Transform child in obj.transform)
+            {
+                setLayer(child.gameObject, newLayer);
+            }
         }
     }
 }
