@@ -70,5 +70,15 @@ namespace Assets.Scripts.Scripted_Events
                 Door.layer = LayerMask.NameToLayer("Glass");
 
         }
+
+        public bool isFlipped()
+        {
+            return buttonRenderer.flipY;
+        }
+
+        public bool isVisible()
+        {
+            return buttonRenderer.enabled;
+        }
     }
 }

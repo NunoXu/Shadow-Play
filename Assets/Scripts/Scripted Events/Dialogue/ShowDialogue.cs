@@ -10,6 +10,8 @@ namespace Assets.Scripts.Scripted_Events.Dialogue
     class ShowDialogue : MonoBehaviour
     {
         private Text dialogueText;
+
+        [TextArea(3, 10)]
         public string dialogue = "Are you not a child of dark? Cast thy shadow upon the light.\n(Press Z)";
 
         void Start()

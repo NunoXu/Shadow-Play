@@ -12,6 +12,8 @@ namespace Assets.Scripts
 
         [HideInInspector]
         public bool PickedUp = false;
+
+        public bool RadiateWhenPicked = true;
         
 
         private Rigidbody2D rigidBody;
