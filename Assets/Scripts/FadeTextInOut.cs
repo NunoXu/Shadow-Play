@@ -17,12 +17,17 @@ namespace Assets.Scripts
         public bool fadeOutOnStart = false;
         private bool logInitialFadeSequence = false;
 
+        private Text text;
+
         
 
         // store colours
         private Color[] colors;
 
-
+        void Start()
+        {
+            text = GetComponent<Text>();
+        }
 
 
         // check the alpha value of most opaque object
@@ -38,96 +43,50 @@ namespace Assets.Scripts
         }
 
         // fade sequence
-        IEnumerator FadeSequence(float fadingOutTime)
+        private IEnumerator FadeSequence(float finalAlpha, float time, CallbackFunction function)
         {
-            // log fading direction, then precalculate fading speed as a multiplier
-            bool fadingOut = (fadingOutTime < 0.0f);
-            float fadingOutSpeed = 1.0f / fadingOutTime;
 
-            // grab all child objects
-            Text[] rendererObjects = GetComponents<Text>();
-            if (colors == null)
+            var increasing = text.color.a < finalAlpha;
+            float fadeSpeed = 1.0f / time;
+            if (!increasing)
+                fadeSpeed = -fadeSpeed;
+
+            while ((increasing && text.color.a < finalAlpha) || (!increasing && text.color.a > finalAlpha))
             {
-                //create a cache of colors if necessary
-                colors = new Color[rendererObjects.Length];
-
-                // store the original colours for all child objects
-                for (int i = 0; i < rendererObjects.Length; i++)
-                {
-                    colors[i] = rendererObjects[i].color;
-                }
-            }
-
-            // make all objects visible
-            for (int i = 0; i < rendererObjects.Length; i++)
-            {
-                rendererObjects[i].enabled = true;
-            }
-
-
-            // get current max alpha
-            float alphaValue = MaxAlpha();
-
-
-            // This is a special case for objects that are set to fade in on start. 
-            // it will treat them as alpha 0, despite them not being so. 
-            if (logInitialFadeSequence && !fadingOut)
-            {
-                alphaValue = 0.0f;
-                logInitialFadeSequence = false;
-            }
-
-            // iterate to change alpha value 
-            while ((alphaValue >= 0.0f && fadingOut) || (alphaValue <= 1.0f && !fadingOut))
-            {
-                alphaValue += Time.deltaTime * fadingOutSpeed;
-
-                for (int i = 0; i < rendererObjects.Length; i++)
-                {
-                    Color newColor = (colors != null ? colors[i] : rendererObjects[i].color);
-                    newColor.a = Mathf.Min(newColor.a, alphaValue);
-                    newColor.a = Mathf.Clamp(newColor.a, 0.0f, 1.0f);
-                    rendererObjects[i].color =newColor;
-                }
+                var alphaValue = text.color.a;
+                var newColor = text.color;
+                newColor.a += Time.deltaTime * fadeSpeed;
+                text.color = newColor;
 
                 yield return null;
             }
 
-            // turn objects off after fading out
-            if (fadingOut)
-            {
-                for (int i = 0; i < rendererObjects.Length; i++)
-                {
-                    rendererObjects[i].enabled = false;
-                }
-            }
-
-
-            Debug.Log("fade sequence end : " + fadingOut);
+            function();
 
         }
 
+        public delegate void CallbackFunction();
 
-        public void FadeIn()
+        public void FadeIn(CallbackFunction function)
         {
-            FadeIn(fadeTime);
+            FadeIn(fadeTime, function);
         }
 
-        public void FadeOut()
+        public void FadeOut(CallbackFunction function)
         {
-            FadeOut(fadeTime);
+            FadeOut(fadeTime, function);
         }
 
-        public void FadeIn(float newFadeTime)
+        public void FadeIn(float newFadeTime, CallbackFunction function)
         {
             StopAllCoroutines();
-            StartCoroutine("FadeSequence", newFadeTime);
+            StartCoroutine(FadeSequence(1.0f, newFadeTime, function));
         }
 
-        public void FadeOut(float newFadeTime)
+        public void FadeOut(float newFadeTime, CallbackFunction function)
         {
             StopAllCoroutines();
-            StartCoroutine("FadeSequence", -newFadeTime);
+            StartCoroutine(FadeSequence(0.0f, newFadeTime, function));
         }
 
     }

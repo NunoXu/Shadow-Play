@@ -30,45 +30,27 @@ namespace Assets.Scripts.Scripted_Events
 
         void Update()
         {
-            if (!fadedin)
+            if (!fadedin && !startedFadingIn)
             {
-                if (!startedFadingIn)
-                {
-                    startTime = Time.time;
-                    startedFadingIn = true;
-                }
-                var alphaValue = (Time.time - startTime) / 1.5f;
-                
-                Color newColor = dialogBox.color;
-
-                newColor.a = Mathf.Clamp(alphaValue, 0.0f, 1.0f);
-                dialogBox.color = newColor;
-
-                if (alphaValue >= 0.98f)
-                    fadedin = true;
+                dialogBox.GetComponent<FadeTextInOut>().FadeIn(FinishedFadingIn);
+                startedFadingIn = true;
             }
 
-            if (lantern.PickedUp && fadedin)
+            if (lantern.PickedUp && fadedin && !startedFadingOut)
             {
-                if (!startedFadingOut)
-                {
-                    startTime = Time.time;
-                    startedFadingOut = true;
-                }
-
-                var timeDifference = (Time.time - startTime);
-                var alphaValue = 1 - timeDifference / 1.5f;
-
-                Color newColor = dialogBox.color;
-                newColor.a = Mathf.Clamp(alphaValue, 0.0f, 1.0f);
-                dialogBox.color = newColor;
-
-
-
-                if (alphaValue <= 0.02f)
-                    this.gameObject.SetActive(false);
+                dialogBox.GetComponent<FadeTextInOut>().FadeOut(FinishedFadingOut);
+                startedFadingOut = true;
             }
         }
 
+        public void FinishedFadingIn()
+        {
+            fadedin = true;
+        }
+
+        public void FinishedFadingOut()
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 }

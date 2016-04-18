@@ -4,7 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Room2WGWalls
   - Lantern
+  - Dialogue
   layers:
   - Default
   - TransparentFX

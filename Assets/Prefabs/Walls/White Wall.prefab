@@ -28,8 +28,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 132680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.768, y: 14.41, z: 0}
-  m_LocalScale: {x: 0.23311643, y: 0.3744054, z: 1}
+  m_LocalPosition: {x: 10.04, y: 28.5, z: 0}
+  m_LocalScale: {x: 0.41976827, y: 0.9376045, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeDelay: 0
-  fadeTime: 0.2
+  fadeTime: 0.1
   fadeInOnStart: 0
   fadeOutOnStart: 0
 --- !u!114 &11476720

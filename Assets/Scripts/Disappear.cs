@@ -28,19 +28,21 @@ namespace Assets.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
 
             LOSEventTrigger trigger = GetComponent<LOSEventTrigger>();
-            trigger.OnNotTriggered += OnNotLit;
-            trigger.OnTriggered += OnLit;
+            if (trigger.enabled)
+            {
+                trigger.OnNotTriggered += OnNotLit;
+                trigger.OnTriggered += OnLit;
 
-            OnNotLit();
+                OnNotLit();
+            }
         }
 
-
-        private void OnNotLit()
+        public void MakeDisappear()
         {
             if (!disappear)
             {
                 _fader.FadeOut(F);
-                disappear = true; 
+                disappear = true;
                 if (removeCollider)
                 {
                     if (_collider != null)
@@ -52,7 +54,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void OnLit()
+        public void MakeAppear()
         {
             if (disappear)
             {
@@ -62,6 +64,17 @@ namespace Assets.Scripts
                     _fader.FadeIn(F);
                 disappear = false;
             }
+        }
+
+
+        private void OnNotLit()
+        {
+            MakeDisappear();
+        }
+
+        private void OnLit()
+        {
+            MakeAppear();  
         }
 
         public void FinishFadeIn()
