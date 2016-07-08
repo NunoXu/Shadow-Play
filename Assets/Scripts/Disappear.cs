@@ -10,12 +10,17 @@ namespace Assets.Scripts
     class Disappear : MonoBehaviour
     {
         public bool removeCollider = true;
+        public Disappear[] extraDisappears;
+        public bool StartHidden = false;
 
         private FadeObjectInOut _fader;
         private Collider2D _collider;
         private Rigidbody2D _rigidbody;
 
         private bool disappear = false;
+
+        private bool _started = false;
+        public bool Started { get { return _started; } }
         
 
         private const float SECONDS_TO_DISAPEAR = 1.0f;
@@ -28,20 +33,25 @@ namespace Assets.Scripts
             _rigidbody = GetComponent<Rigidbody2D>();
 
             LOSEventTrigger trigger = GetComponent<LOSEventTrigger>();
-            if (trigger.enabled)
+            if (trigger != null && trigger.enabled)
             {
                 trigger.OnNotTriggered += OnNotLit;
                 trigger.OnTriggered += OnLit;
 
-                OnNotLit();
+                MakeDisappear();
             }
+
+            if (StartHidden)
+                MakeDisappear();
+
+            _started = false;
         }
 
         public void MakeDisappear()
         {
             if (!disappear)
             {
-                _fader.FadeOut(F);
+                _fader.FadeOut(() => { });
                 disappear = true;
                 if (removeCollider)
                 {
@@ -70,11 +80,21 @@ namespace Assets.Scripts
         private void OnNotLit()
         {
             MakeDisappear();
+            
+            foreach (Disappear extra in extraDisappears)
+            {
+                if(extra.Started)
+                    extra.MakeDisappear();
+            }
         }
 
         private void OnLit()
         {
-            MakeAppear();  
+            MakeAppear();
+            foreach (Disappear extra in extraDisappears)
+            {
+                extra.MakeAppear();
+            }
         }
 
         public void FinishFadeIn()

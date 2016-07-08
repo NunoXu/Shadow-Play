@@ -30,6 +30,7 @@ namespace Assets.Scripts.Player
             {
                 lanterns.Add(lantern.GetComponent<Lantern>());
             }
+            ToggleTrans();
         }
 
         void Update()
