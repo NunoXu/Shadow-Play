@@ -39,6 +39,11 @@ namespace Assets.Scripts.Scripted_Events
 
         private void Toggle()
         {
+            foreach (GameObject normalWall in NormalWalls)
+            {
+                normalWall.SetActive(!normalWall.activeSelf);
+            }
+
             foreach (GameObject wall in WGWalls)
             {
                 toggleObject(wall);
